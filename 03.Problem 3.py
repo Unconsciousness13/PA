@@ -1,17 +1,32 @@
-def get_magic_triangle(n):
-    matrix = []
-    number = 1
-    for num in range(1, n + 1):
-        matrix.append([number] * num)
-    for r in range(0, n):
-        for c in range(len(matrix[r])):
-            if r - 1 > 0 and c - 1 >= 0:
-                if c in range(r):
-                    matrix[r][c] = matrix[r - 1][c - 1] + matrix[r - 1][c]
-            else:
-                matrix[r][c] = matrix[0][0]
+def stock_availability(*args):
+    products = args[0]
+    command = args[1]
+    if command == "delivery":
+        for flavour in args[1:]:
+            for n in range(args.index('delivery') + 1, len(args)):
+                products.append(args[n])
+            return products
 
-    return matrix
+    elif command == "sell":
+        if len(args) == 2:
+            products.pop(0)
+
+        if isinstance(args[-1], int):
+            number = int(args[-1])
+            return products[number:]
+        if isinstance(args[-1], str):
+            cupcakes = args[int(args.index("sell") + 1):]
+            for sweet in cupcakes:
+                products = [i for i in products if not i == sweet]
+            return products
+
+    return products
 
 
-get_magic_triangle(5)
+print(stock_availability(["choco", "vanilla", "banana"], "delivery", "caramel", "berry"))
+print(stock_availability(["chocolate", "vanilla", "banana"], "delivery", "cookie", "banana"))
+print(stock_availability(["chocolate", "vanilla", "banana"], "sell"))
+print(stock_availability(["chocolate", "vanilla", "banana"], "sell", 3))
+print(stock_availability(["chocolate", "chocolate", "banana"], "sell", "chocolate"))
+print(stock_availability(["cookie", "chocolate", "banana"], "sell", "chocolate"))
+print(stock_availability(["chocolate", "vanilla", "banana"], "sell", "cookie"))
